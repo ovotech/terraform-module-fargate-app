@@ -1,0 +1,14 @@
+version: '2'
+services:
+  terraform:
+    container_name: terraform
+    build: .
+    image: terraform-local
+    volumes:
+      - ../:/app
+      - ${HOME}/.bash_history:/root/.ash_history:rw
+      - ${HOME}/.aws/credentials:/root/.aws/credentials:ro
+      - ${HOME}/.aws/config:/root/.aws/config:ro
+    environment:
+      - AWS_PROFILE=${AWS_PROFILE}
+    working_dir: /app
