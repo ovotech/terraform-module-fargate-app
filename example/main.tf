@@ -19,7 +19,6 @@ module "fargate_app" {
   vpc                 = var.vpc_id
   private_subnets     = var.private_subnets
   public_subnets      = var.public_subnets
-  ecr_repository_name = var.ecr_repository_name
   environment_vars    = [
     {
       name = "NODE_ENV",

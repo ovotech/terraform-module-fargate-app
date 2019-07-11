@@ -33,10 +33,6 @@ variable "certificate_arn" {
   description = "The ARN of a AWS certificate for the HTTPS Listner on the ALB"
 }
 
-variable "ecr_repository_name" {
-  description = "The name of the ecr repository holding the application image"
-}
-
 variable "docker_image" {
   description = "The docker image to use"
   default = "nginx"
