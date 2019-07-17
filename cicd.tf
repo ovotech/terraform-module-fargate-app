@@ -5,10 +5,6 @@ resource "aws_iam_user" "cicd" {
   name = "srv_${var.app}_${var.environment}_cicd"
 }
 
-resource "aws_iam_access_key" "cicd_keys" {
-  user = aws_iam_user.cicd.name
-}
-
 # grant required permissions to deploy
 data "aws_iam_policy_document" "cicd_policy" {
   # allows user to push/pull to the registry
@@ -72,12 +68,3 @@ data "aws_ecr_repository" "ecr" {
   name = var.ecr_repository_name
 }
 
-# The AWS keys for the CICD user to use in a build system
-output "cicd_keys" {
-  value = "terraform state show aws_iam_access_key.cicd_keys"
-}
-
-# The URL for the docker image repo in ECR
-output "docker_registry" {
-  value = data.aws_ecr_repository.ecr.repository_url
-}
