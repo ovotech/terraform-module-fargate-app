@@ -4,7 +4,6 @@ output "alb_zone_arn" {
 
 output "alb_zone_id" {
   value = "${aws_alb.main.zone_id}"
-
 }
 
 output "alb_dns_name" {
