@@ -64,3 +64,15 @@ variable "alert_actions" {
   default     = []
 }
 
+# CPU Alert Threshold
+variable "cpu_alert_threshold" {
+  description = "Threshold which will trigger a alert when the cpu crosses"
+  default     = "80"
+}
+
+# Memory Alert Threshold
+variable "memory_alert_threshold" {
+  description = "Threshold which will trigger a alert when the memory crosses"
+  default     = "80"
+}
+
