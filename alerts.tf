@@ -11,6 +11,7 @@ resource "aws_cloudwatch_metric_alarm" "CPUUtilization_alarm" {
   alarm_actions             = "${var.alert_actions}"
   ok_actions                = "${var.alert_actions}"
   insufficient_data_actions = []
+  treat_missing_data        = "notBreaching"
 }
 
 resource "aws_cloudwatch_metric_alarm" "MemoryUtilization_alarm" {
@@ -26,4 +27,5 @@ resource "aws_cloudwatch_metric_alarm" "MemoryUtilization_alarm" {
   alarm_actions             = "${var.alert_actions}"
   ok_actions                = "${var.alert_actions}"
   insufficient_data_actions = []
+  treat_missing_data        = "notBreaching"
 }
