@@ -76,3 +76,12 @@ variable "memory_alert_threshold" {
   default     = "80"
 }
 
+# Graylog Port
+variable "graylog_port" {
+  default = "12202"
+}
+
+# Graylog Cidr Block
+variable "graylog_cidr" {
+  description = "Cidr Block for Graylog"
+}
