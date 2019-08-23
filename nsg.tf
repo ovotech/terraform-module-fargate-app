@@ -56,7 +56,7 @@ resource "aws_security_group_rule" "egress_to_graylog_rule" {
   from_port                = var.graylog_port
   to_port                  = var.graylog_port
   protocol                 = "tcp"
-  cidr_blocks              = [var.graylog_cidr]
+  cidr_blocks              = var.graylog_cidr
 
   security_group_id = aws_security_group.nsg_lb.id
 }
