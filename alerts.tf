@@ -12,6 +12,10 @@ resource "aws_cloudwatch_metric_alarm" "CPUUtilization_alarm" {
   ok_actions                = "${var.alert_actions}"
   insufficient_data_actions  = []
   treat_missing_data        = "notBreaching"
+  dimensions = {
+    ServiceName = "${aws_ecs_cluster.app.name}"
+    ClusterName = "${aws_ecs_service.app.name}"
+  }
 }
 
 resource "aws_cloudwatch_metric_alarm" "MemoryUtilization_alarm" {
@@ -28,6 +32,10 @@ resource "aws_cloudwatch_metric_alarm" "MemoryUtilization_alarm" {
   ok_actions                = "${var.alert_actions}"
   insufficient_data_actions  = []
   treat_missing_data        = "notBreaching"
+  dimensions = {
+    ServiceName = "${aws_ecs_cluster.app.name}"
+    ClusterName = "${aws_ecs_service.app.name}"
+  }
 }
 
 resource "aws_cloudwatch_metric_alarm" "HTTPCode_ELB_5XX_Count_alarm" {
@@ -44,4 +52,8 @@ resource "aws_cloudwatch_metric_alarm" "HTTPCode_ELB_5XX_Count_alarm" {
   ok_actions                = "${var.alert_actions}"
   insufficient_data_actions  = []
   treat_missing_data        = "notBreaching"
+  dimensions = {
+    ServiceName = "${aws_ecs_cluster.app.name}"
+    ClusterName = "${aws_ecs_service.app.name}"
+  }
 }
