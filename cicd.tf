@@ -56,6 +56,23 @@ data "aws_iam_policy_document" "cicd_policy" {
       aws_iam_role.ecsTaskExecutionRole.arn,
     ]
   }
+
+  # allows user to manipulate its own access keys
+  statement {
+    sid = "accessKeys"
+
+    actions = [
+      "iam:DeleteAccessKey",
+      "iam:GetAccessKeyLastUsed",
+      "iam:UpdateAccessKey",
+      "iam:CreateAccessKey",
+      "iam:ListAccessKeys",
+    ]
+
+    resources = [
+      aws_iam_user.cicd.arn,
+    ]
+  }
 }
 
 resource "aws_iam_user_policy" "cicd_user_policy" {
