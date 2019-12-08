@@ -19,14 +19,6 @@ variable "replicas" {
 
 variable "environment_vars" {}
 
-variable "cpu" {
-  default = "256"
-}
-
-variable "memory" {
-  default = "512"
-}
-
 # The name of the container to run
 variable "container_name" {
   default = "app"
@@ -59,43 +51,70 @@ resource "aws_appautoscaling_target" "app_scale_target" {
   min_capacity       = var.ecs_autoscale_min_instances
 }
 
+module "app_container_definition" {
+  source                       = "git::https://github.com/cloudposse/terraform-aws-ecs-container-definition.git?ref=tags/0.21.0"
+  container_name               = var.container_name
+  container_image              = var.docker_image
+  container_cpu                = var.container_cpu
+  container_memory             = var.container_memory
+  essential                    = true
+  readonly_root_filesystem     = false
+  environment                  = var.environment_vars
+  port_mappings                = [
+    {
+      containerPort            = var.container_port
+      hostPort                 = var.container_port
+      protocol                 = "tcp"
+    },
+  ]
+  log_configuration            = {
+    logDriver = "awslogs"
+    options   = {
+      "awslogs-group" = "/fargate/service/${var.app}-${var.environment}"
+      "awslogs-region" = "eu-west-1"
+      "awslogs-stream-prefix" = "ecs"
+    }
+    secretOptions = null
+  }
+}
+
+module "datadog_container_definition" {
+  source                       = "git::https://github.com/cloudposse/terraform-aws-ecs-container-definition.git?ref=tags/0.21.0"
+  container_name               = "datadog-agent"
+  container_image              = "datadog/agent:latest"
+  container_cpu                = "10"
+  container_memory             = "128"
+  essential                    = true
+  readonly_root_filesystem     = false
+  environment                  = [
+   {
+      name = "DD_API_KEY",
+      value = var.datadog_api_key
+    },
+    {
+      name = "ECS_FARGATE",
+      value = true
+    },
+    {
+      name = "DD_APM_ENABLED",
+      value = true
+    }
+  ]
+  port_mappings                = null
+}
+
 resource "aws_ecs_task_definition" "app" {
   family                   = "${var.app}-${var.environment}"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
-  cpu                      = var.cpu
-  memory                   = var.memory
+  cpu                      = var.task_cpu
+  memory                   = var.task_memory
   execution_role_arn       = aws_iam_role.ecsTaskExecutionRole.arn
 
   # defined in role.tf
   task_role_arn = aws_iam_role.app_role.arn
 
-  container_definitions = <<DEFINITION
-[
-  {
-    "name": "${var.container_name}",
-    "image": "${var.docker_image}",
-    "essential": true,
-    "portMappings": [
-      {
-        "protocol": "tcp",
-        "containerPort": ${var.container_port},
-        "hostPort": ${var.container_port}
-      }
-    ],
-    "environment": ${jsonencode(var.environment_vars)},
-    "logConfiguration": {
-      "logDriver": "awslogs",
-      "options": {
-        "awslogs-group": "/fargate/service/${var.app}-${var.environment}",
-        "awslogs-region": "eu-west-1",
-        "awslogs-stream-prefix": "ecs"
-      }
-    }
-  }
-]
-DEFINITION
-
+  container_definitions = "[${module.app_container_definition.json_map},${module.datadog_container_definition.json_map}]"
 
   tags = var.tags
 }

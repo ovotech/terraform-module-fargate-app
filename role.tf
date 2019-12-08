@@ -11,11 +11,13 @@ resource "aws_iam_role_policy" "app_policy" {
   policy = data.aws_iam_policy_document.app_policy.json
 }
 
-# TODO: fill out custom policy
 data "aws_iam_policy_document" "app_policy" {
   statement {
     actions = [
       "ecs:DescribeClusters",
+      "ecs:ListClusters",
+      "ecs:ListContainerInstances",
+      "ecs:DescribeContainerInstances"
     ]
 
     resources = [
