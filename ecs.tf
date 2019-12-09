@@ -105,7 +105,12 @@ module "datadog_container_definition" {
       containerPort            = 8126
       hostPort                 = 8126
       protocol                 = "tcp"
-    }
+    },
+    {
+      containerPort            = 8125
+      hostPort                 = 8125
+      protocol                 = "udp"
+    },
   ]
 }
 
