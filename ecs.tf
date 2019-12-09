@@ -65,7 +65,7 @@ module "app_container_definition" {
       containerPort            = var.container_port
       hostPort                 = var.container_port
       protocol                 = "tcp"
-    },
+    }
   ]
   log_configuration            = {
     logDriver = "awslogs"
@@ -100,7 +100,13 @@ module "datadog_container_definition" {
       value = true
     }
   ]
-  port_mappings                = null
+  port_mappings                = [
+    {
+      containerPort            = 8126
+      hostPort                 = 8126
+      protocol                 = "tcp"
+    }
+  ]
 }
 
 resource "aws_ecs_task_definition" "app" {
