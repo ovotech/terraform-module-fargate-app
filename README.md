@@ -1,4 +1,8 @@
-Terraform module to provision a Fargate application with a loadbalancer.
+Terraform module to provision a Fargate application.
+
+This module includes DataDog integration and requires a Datadog API key.
+
+This module creates a Fargate applicaiton with a CI/CD user, load balancer, alerts, dashboards and logs.
 
 ## Examples
 
@@ -10,9 +14,13 @@ See `/examples/`
 |------|-------------|:----:|:-----:|:-----:|
 | app | The application's name | string | - | yes |
 | certificate_arn | The ARN for the SSL certificate | string | - | yes |
+| container_cpu | The number of cpu units to reserve for the container | number | 246 | no |
+| container_memory | The amount of memory to allow the application container to use | number | 256 | no |
+| container_memory_reservation | The amount of memory to reserve for the application container, it can exceed this | number | 128 | no |
 | container_name | The name of the container to run | string | `app` | no |
 | container_port | The port the container will listen on, used for load balancer health check Best practice is that this value is higher than 1024 so the container processes isn't running at root. | string | - | yes |
 string | `quay.io/turner/turner-defaultbackend:0.2.0` | no |
+| datadog_api_key | The DataDog API key for this applicaiton | string | - | yes |
 | deregistration_delay | The amount time for Elastic Load Balancing to wait before changing the state of a deregistering target from draining to unused | string | `30` | no |
 | ecs_as_cpu_high_threshold_per | If the average CPU utilization over a minute rises to this threshold, the number of containers will be increased (but not above ecs_autoscale_max_instances). | string | `80` | no |
 | ecs_as_cpu_low_threshold_per | If the average CPU utilization over a minute drops to this threshold, the number of containers will be reduced (but not below ecs_autoscale_min_instances). | string | `20` | no |
@@ -37,8 +45,6 @@ string | `quay.io/turner/turner-defaultbackend:0.2.0` | no |
 
 | Name | Description |
 |------|-------------|
-| cicd_keys | The AWS keys for the CICD user to use in a build system |
-| docker_registry | The URL for the docker image repo in ECR |
 | lb_dns | The load balancer DNS name |
 
 ### Docker instructions

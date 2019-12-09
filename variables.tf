@@ -85,3 +85,36 @@ variable "graylog_port" {
 variable "graylog_cidr" {
   description = "Cidr Block for Graylog"
 }
+
+variable "task_cpu" {
+  default = "256"
+  description = "The number of cpu units to reserve for the task, must be higher than the all the CPU in the containers in the task"
+}
+
+variable "task_memory" {
+  default = "512"
+  description = "The amount of memory (in MiB) to allow the task to use. Must be higher than all the containers in the task"
+}
+
+variable "container_memory" {
+  type        = number
+  default     = "384"
+  description = "The amount of memory (in MiB) to allow the container to use. This is a hard limit, if the container attempts to exceed the container_memory, the container is killed. This field is optional for Fargate launch type and the total amount of container_memory of all containers in a task will need to be lower than the task memory value"
+}
+
+variable "container_memory_reservation" {
+  type        = number
+  default     = "128"
+  description = "The amount of memory (in MiB) to reserve for the container. If container needs to exceed this threshold, it can do so up to the set container_memory hard limit"
+}
+
+variable "container_cpu" {
+  type        = number
+  default     = "246"
+  description = "The number of cpu units to reserve for the container. This is optional for tasks using Fargate launch type and the total amount of container_cpu of all containers in a task will need to be lower than the task-level cpu value"
+}
+
+variable "datadog_api_key" {
+  type        = string
+  description = "The DataDog API key for this applicaiton"
+}
