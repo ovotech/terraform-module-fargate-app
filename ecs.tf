@@ -84,7 +84,7 @@ module "datadog_container_definition" {
   container_image              = "datadog/agent:latest"
   container_cpu                = "10"
   container_memory             = "128"
-  essential                    = true
+  essential                    = false
   readonly_root_filesystem     = false
   environment                  = [
    {
