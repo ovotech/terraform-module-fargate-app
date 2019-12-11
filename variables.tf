@@ -45,11 +45,11 @@ variable "vpc" {
 }
 
 # The private subnets, minimum of 2, that are a part of the VPC(s)
-variable "private_subnets" {
+variable "ecs_task_subnets" {
 }
 
 # The public subnets, minimum of 2, that are a part of the VPC(s)
-variable "public_subnets" {
+variable "load_balancer_subnets" {
 }
 
 # The docker image that will be deployed to ECS
@@ -87,12 +87,12 @@ variable "graylog_cidr" {
 }
 
 variable "task_cpu" {
-  default = "256"
+  default     = "256"
   description = "The number of cpu units to reserve for the task, must be higher than the all the CPU in the containers in the task"
 }
 
 variable "task_memory" {
-  default = "512"
+  default     = "512"
   description = "The amount of memory (in MiB) to allow the task to use. Must be higher than all the containers in the task"
 }
 

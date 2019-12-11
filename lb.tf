@@ -31,12 +31,17 @@ variable "lb_access_logs_expiration_days" {
   default = "3"
 }
 
+variable "lb_internal" {
+  default = false
+}
+
 resource "aws_alb" "main" {
   name = "${var.app}-${var.environment}"
 
   # launch lbs in the public subnet
-  subnets = split(",", var.public_subnets)
+  subnets         = split(",", var.load_balancer_subnets)
   security_groups = [aws_security_group.nsg_lb.id]
+  internal        = var.lb_internal
   tags            = var.tags
 
   # enable access logs in order to get support from aws
