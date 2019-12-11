@@ -36,6 +36,7 @@ module "fargate_app" {
     team        = var.team
   }
   docker_image    = var.docker_image
+  graylog_cidr        = []
   datadog_api_key = null
 }
 
