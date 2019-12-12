@@ -76,16 +76,6 @@ variable "memory_alert_threshold" {
   default     = "80"
 }
 
-# Graylog Port
-variable "graylog_port" {
-  default = "12202"
-}
-
-# Graylog Cidr Block
-variable "graylog_cidr" {
-  description = "Cidr Block for Graylog"
-}
-
 variable "task_cpu" {
   default     = "256"
   description = "The number of cpu units to reserve for the task, must be higher than the all the CPU in the containers in the task"
