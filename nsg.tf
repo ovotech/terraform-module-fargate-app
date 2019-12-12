@@ -50,14 +50,3 @@ resource "aws_security_group_rule" "nsg_task_egress_rule" {
   security_group_id = aws_security_group.nsg_task.id
 }
 
-resource "aws_security_group_rule" "egress_to_graylog_rule" {
-  description              = "Allow egress to graylog hosts in engineering services VPC"
-  type                     = "egress"
-  from_port                = var.graylog_port
-  to_port                  = var.graylog_port
-  protocol                 = "tcp"
-  cidr_blocks              = var.graylog_cidr
-
-  security_group_id = aws_security_group.nsg_lb.id
-}
-
