@@ -39,20 +39,20 @@ variable "ecr_repository_name" {
 
 variable "docker_image" {
   description = "The docker image to use"
-  default = "nginx"
+  default     = "nginx"
 }
 
 variable "health_check" {
   description = "The endpoint to check the health of the container"
-  default = "/"
+  default     = "/"
 }
 
 variable "replicas" {
   description = "The number of tasks to run"
-  default = "1"
+  default     = "1"
 }
 
 variable "container_port" {
   description = "The port on docker container that is hosting the application"
-  default = "80"
+  default     = "80"
 }

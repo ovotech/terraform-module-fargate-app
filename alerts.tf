@@ -10,7 +10,7 @@ resource "aws_cloudwatch_metric_alarm" "CPUUtilization_alarm" {
   alarm_description         = "This metric monitors ECS CPU utilization for ${var.app}"
   alarm_actions             = "${var.alert_actions}"
   ok_actions                = "${var.alert_actions}"
-  insufficient_data_actions  = []
+  insufficient_data_actions = []
   treat_missing_data        = "notBreaching"
   dimensions = {
     ServiceName = "${aws_ecs_cluster.app.name}"
@@ -30,7 +30,7 @@ resource "aws_cloudwatch_metric_alarm" "MemoryUtilization_alarm" {
   alarm_description         = "This metric monitors ECS memory utilization for ${var.app}"
   alarm_actions             = "${var.alert_actions}"
   ok_actions                = "${var.alert_actions}"
-  insufficient_data_actions  = []
+  insufficient_data_actions = []
   treat_missing_data        = "notBreaching"
   dimensions = {
     ServiceName = "${aws_ecs_cluster.app.name}"
@@ -50,7 +50,7 @@ resource "aws_cloudwatch_metric_alarm" "HTTPCode_ELB_5XX_Count_alarm" {
   alarm_description         = "HTTP 5XX alarm for over 25 counts within 5 minutes for ${var.app}"
   alarm_actions             = "${var.alert_actions}"
   ok_actions                = "${var.alert_actions}"
-  insufficient_data_actions  = []
+  insufficient_data_actions = []
   treat_missing_data        = "notBreaching"
   dimensions = {
     LoadBalancer = "${aws_alb.main.arn_suffix}"

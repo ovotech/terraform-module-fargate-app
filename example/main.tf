@@ -1,5 +1,5 @@
 provider "aws" {
-  region  = var.region
+  region = var.region
 }
 
 module "fargate_app" {
@@ -9,35 +9,35 @@ module "fargate_app" {
     aws = aws
   }
 
-  region              = var.region
-  app                 = var.app_name
-  certificate_arn     = var.certificate_arn
-  environment         = var.environment
-  container_port      = var.container_port
-  replicas            = var.replicas
-  health_check        = var.health_check
-  vpc                 = var.vpc_id
-  private_subnets     = var.private_subnets
-  public_subnets      = var.public_subnets
-  ecr_repository_name = var.ecr_repository_name
-  environment_vars    = [
+  region                = var.region
+  app                   = var.app_name
+  certificate_arn       = var.certificate_arn
+  environment           = var.environment
+  container_port        = var.container_port
+  replicas              = var.replicas
+  health_check          = var.health_check
+  vpc                   = var.vpc_id
+  ecs_task_subnets      = var.private_subnets
+  load_balancer_subnets = var.public_subnets
+  ecr_repository_name   = var.ecr_repository_name
+  environment_vars = [
     {
-      name = "NODE_ENV",
+      name  = "NODE_ENV",
       value = var.environment
     },
     {
-      name = "PORT",
+      name  = "PORT",
       value = var.container_port
     }
   ]
   tags = {
-    application       = var.app_name
-    environment       = var.environment
-    team              = var.team
+    application = var.app_name
+    environment = var.environment
+    team        = var.team
   }
-  docker_image        = var.docker_image
+  docker_image    = var.docker_image
   graylog_cidr        = []
-  datadog_api_key     = null
+  datadog_api_key = null
 }
 
 output "fargate_app_lb" {
