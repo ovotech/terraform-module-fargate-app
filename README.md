@@ -34,6 +34,7 @@ string | `quay.io/turner/turner-defaultbackend:0.2.0` | no |
 | https_port | The port to listen on for HTTPS, always use 443 | string | `443` | no |
 | lb_port | The port the load balancer will listen on | string | `80` | no |
 | lb_protocol | The load balancer protocol | string | `HTTP` | no |
+| lb_internal | Whether the load balancer should be internal. | boolean | `false` | no |
 | ecs_task_subnets | The subnets, minimum of 2, that are a part of the VPC(s), that the task is deployed into (should be private) | string | - | yes |
 | load_balancer_subnets | The subnets, minimum of 2, that are a part of the VPC(s), that the LB is deployed into (often public) | string | - | yes |
 | region | The AWS region to use for the dev environment's infrastructure Currently, Fargate is only available in `us-east-1`. | string | `us-east-1` | no |
