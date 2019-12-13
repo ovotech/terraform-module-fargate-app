@@ -1,7 +1,5 @@
 Terraform module to provision a Fargate application.
 
-This module includes DataDog integration and requires a Datadog API key.
-
 This module creates a Fargate applicaiton with a CI/CD user, load balancer, alerts, dashboards and logs.
 
 ## Examples
