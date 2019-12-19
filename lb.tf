@@ -39,7 +39,7 @@ resource "aws_alb" "main" {
   name = "${var.app}-${var.environment}"
 
   # launch lbs in the public subnet
-  subnets         = split(",", var.load_balancer_subnets)
+  subnets         = split(",", var.lb_subnets)
   security_groups = [aws_security_group.nsg_lb.id]
   internal        = var.lb_internal
   tags            = var.tags
