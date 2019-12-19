@@ -52,6 +52,11 @@ variable "ecs_task_subnets" {
 variable "load_balancer_subnets" {
 }
 
+# Ingress IP ranges that are allowed on the load balancer
+variable "lb_ingress_cidr_blocks" {
+  default = ["0.0.0.0/0"]
+}
+
 # The docker image that will be deployed to ECS
 variable "docker_image" {
   default = "nginx"
