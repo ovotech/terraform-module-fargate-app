@@ -88,16 +88,18 @@ module "datadog_container_definition" {
   readonly_root_filesystem = false
   environment = [
     {
-      name  = "DD_API_KEY",
-      value = var.datadog_api_key
-    },
-    {
       name  = "ECS_FARGATE",
       value = true
     },
     {
       name  = "DD_APM_ENABLED",
       value = true
+    }
+  ]
+  secrets = [
+    {
+      name: "DD_API_KEY",
+      valueFrom: var.datadog_api_key_from
     }
   ]
   port_mappings = [
