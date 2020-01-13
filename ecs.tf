@@ -81,7 +81,7 @@ module "app_container_definition" {
 module "datadog_container_definition" {
   source                   = "git::https://github.com/cloudposse/terraform-aws-ecs-container-definition.git?ref=tags/0.21.0"
   container_name           = "datadog-agent"
-  container_image          = "datadog/agent:latest"
+  container_image          = "datadog/agent:7.16.1"
   container_cpu            = "10"
   container_memory         = "128"
   essential                = false
@@ -127,7 +127,7 @@ resource "aws_ecs_task_definition" "app" {
   # defined in role.tf
   task_role_arn = aws_iam_role.app_role.arn
 
-  container_definitions = "[${module.app_container_definition.json_map},${module.datadog_container_definition.json_map}]"
+  container_definitions = var.datadog_api_key_from != null ? "[${module.app_container_definition.json_map},${module.datadog_container_definition.json_map}]" : "[${module.app_container_definition.json_map}]"
 
   tags = var.tags
 }
