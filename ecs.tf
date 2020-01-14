@@ -78,6 +78,44 @@ module "app_container_definition" {
   }
 }
 
+module "datadog_container_definition" {
+  source                   = "git::https://github.com/cloudposse/terraform-aws-ecs-container-definition.git?ref=tags/0.21.0"
+  container_name           = "datadog-agent"
+  container_image          = "datadog/agent:7.16.1"
+  container_cpu            = "10"
+  container_memory         = "128"
+  essential                = false
+  readonly_root_filesystem = false
+  environment = [
+    {
+      name  = "ECS_FARGATE",
+      value = true
+    },
+    {
+      name  = "DD_APM_ENABLED",
+      value = true
+    }
+  ]
+  secrets = [
+    {
+      name: "DD_API_KEY",
+      valueFrom: var.datadog_api_key_from
+    }
+  ]
+  port_mappings = [
+    {
+      containerPort = 8126
+      hostPort      = 8126
+      protocol      = "tcp"
+    },
+    {
+      containerPort = 8125
+      hostPort      = 8125
+      protocol      = "udp"
+    },
+  ]
+}
+
 resource "aws_ecs_task_definition" "app" {
   family                   = "${var.app}-${var.environment}"
   requires_compatibilities = ["FARGATE"]
@@ -89,7 +127,7 @@ resource "aws_ecs_task_definition" "app" {
   # defined in role.tf
   task_role_arn = aws_iam_role.app_role.arn
 
-  container_definitions = "[${module.app_container_definition.json_map}]"
+  container_definitions = var.datadog_api_key_from != null ? "[${module.app_container_definition.json_map},${module.datadog_container_definition.json_map}]" : "[${module.app_container_definition.json_map}]"
 
   tags = var.tags
 }

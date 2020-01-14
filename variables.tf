@@ -108,3 +108,9 @@ variable "container_cpu" {
   default     = "246"
   description = "The number of cpu units to reserve for the container. This is optional for tasks using Fargate launch type and the total amount of container_cpu of all containers in a task will need to be lower than the task-level cpu value"
 }
+
+variable "datadog_api_key_from" {
+  type        = string
+  description = "The SSM parameter for the DataDog API key for this applicaiton"
+  default     = null
+}

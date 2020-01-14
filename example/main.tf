@@ -35,7 +35,8 @@ module "fargate_app" {
     environment = var.environment
     team        = var.team
   }
-  docker_image = var.docker_image
+  docker_image    = var.docker_image
+  datadog_api_key = null
 }
 
 output "fargate_app_lb" {
