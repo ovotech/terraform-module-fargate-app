@@ -192,3 +192,17 @@ resource "aws_cloudwatch_log_group" "logs" {
   tags              = var.tags
 }
 
+resource "aws_iam_role_policy" "secretsRead_policy" {
+  name = "secretsRead_policy"
+  role = aws_iam_role.ecsTaskExecutionRole.name
+  policy = data.aws_iam_policy_document.secretsRead_policy_document.json
+}
+
+data "aws_iam_policy_document" "secretsRead_policy_document" {
+  statement {
+    actions = [
+      "ssm:GetParameters",
+    ]
+    resources = [var.datadog_api_key_from]
+  }
+}

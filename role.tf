@@ -17,8 +17,7 @@ data "aws_iam_policy_document" "app_policy" {
       "ecs:DescribeClusters",
       "ecs:ListClusters",
       "ecs:ListContainerInstances",
-      "ecs:DescribeContainerInstances",
-      "ssm:GetParameters"
+      "ecs:DescribeContainerInstances"
     ]
 
     resources = [
