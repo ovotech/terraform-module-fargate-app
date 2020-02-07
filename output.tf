@@ -21,3 +21,7 @@ output "task_security_group_id" {
 output "alb_security_group_id" {
   value = "${aws_security_group.nsg_lb.id}"
 }
+
+output "cicd_user_name" {
+  value = "${aws_iam_user.cicd.name}"
+}
