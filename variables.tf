@@ -22,8 +22,18 @@ variable "environment" {
 }
 
 # The secrets that is being built
+# The environment that is being built
 variable "secrets" {
+  type = list(
+    object(
+      {
+        name = string
+        valueFrom = string
+      }
+    )
+  )
 }
+
 
 # The port the container will listen on, used for load balancer health check
 # Best practice is that this value is higher than 1024 so the container processes
