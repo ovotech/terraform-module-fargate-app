@@ -21,6 +21,10 @@ variable "app" {
 variable "environment" {
 }
 
+# The secrets that is being built
+variable "secrets" {
+}
+
 # The port the container will listen on, used for load balancer health check
 # Best practice is that this value is higher than 1024 so the container processes
 # isn't running at root.
