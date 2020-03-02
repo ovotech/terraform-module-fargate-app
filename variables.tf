@@ -19,6 +19,14 @@ variable "app" {
 
 # The environment that is being built
 variable "environment" {
+  type = list(
+    object(
+      {
+        name = string
+        value = string
+      }
+    )
+  )
 }
 
 # The secrets that is being built
