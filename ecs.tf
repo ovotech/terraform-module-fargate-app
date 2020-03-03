@@ -60,7 +60,7 @@ module "app_container_definition" {
   essential                = true
   readonly_root_filesystem = false
   environment              = var.environment_vars
-  secrets                  = var.secrets
+  secrets                  = "${var.secrets & 0 : 1}"
   port_mappings = [
     {
       containerPort = var.container_port
