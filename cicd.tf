@@ -5,6 +5,20 @@ resource "aws_iam_user" "cicd" {
   name = "srv_${var.app}_${var.environment}_cicd"
 }
 
+resource "aws_iam_group" "cicd" {
+  name = "srv_${var.app}_${var.environment}_cicd"
+}
+
+resource "aws_iam_group_membership" "cicd" {
+  name = "srv_${var.app}_${var.environment}_cicd_group_membership"
+
+  users = [
+    aws_iam_user.cicd.name
+  ]
+
+  group = aws_iam_group.cicd.name
+}
+
 # grant required permissions to deploy
 data "aws_iam_policy_document" "cicd_policy" {
   # allows user to push/pull to the registry
@@ -75,9 +89,9 @@ data "aws_iam_policy_document" "cicd_policy" {
   }
 }
 
-resource "aws_iam_user_policy" "cicd_user_policy" {
+resource "aws_iam_group_policy" "cicd_group_policy" {
   name   = "${var.app}_${var.environment}_cicd"
-  user   = aws_iam_user.cicd.name
+  group   = aws_iam_group.cicd.name
   policy = data.aws_iam_policy_document.cicd_policy.json
 }
 
