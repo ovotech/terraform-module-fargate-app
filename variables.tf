@@ -21,6 +21,19 @@ variable "app" {
 variable "environment" {
 }
 
+# The secrets SSM ARNs
+variable "secrets" {
+  type = list(
+    object(
+      {
+        name = string
+        valueFrom = string
+      }
+    )
+  )
+  default = []
+}
+
 # The port the container will listen on, used for load balancer health check
 # Best practice is that this value is higher than 1024 so the container processes
 # isn't running at root.
