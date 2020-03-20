@@ -217,8 +217,6 @@ data "aws_iam_policy_document" "secretsRead_policy_document" {
       "kms:DescribeKey",
       "kms:Decrypt"
     ]
-    resources = [
-      data.aws_kms_alias.ssm_key[*].target_key_arn
-    ]
+    resources = data.aws_kms_alias.ssm_key[*].target_key_arn
   }
 }
