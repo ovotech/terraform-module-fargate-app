@@ -21,6 +21,12 @@ variable "app" {
 variable "environment" {
 }
 
+# Key aliases the app is allowed to decrypt with
+variable "kms_key_aliases" {
+  default = ["alias/aws/ssm"]
+  type = list(string)
+}
+
 # The secrets SSM ARNs
 variable "secrets" {
   type = list(

@@ -199,11 +199,26 @@ resource "aws_iam_role_policy" "secretsRead_policy" {
   policy = data.aws_iam_policy_document.secretsRead_policy_document.json
 }
 
+data "aws_kms_alias" "ssm_key" {
+  count = length(var.kms_key_aliases)
+  name = var.kms_key_aliases[count.index]
+}
+
 data "aws_iam_policy_document" "secretsRead_policy_document" {
   statement {
     actions = [
       "ssm:GetParameters",
     ]
-    resources = [var.datadog_api_key_from]
+    resources = concat([var.datadog_api_key_from], var.secrets[*].valueFrom)
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "kms:DescribeKey",
+      "kms:Decrypt"
+    ]
+    resources = [
+      data.aws_kms_alias.ssm_key[*].target_key_arn
+    ]
   }
 }
