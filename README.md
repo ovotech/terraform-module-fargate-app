@@ -4,6 +4,8 @@ This module includes DataDog integration and requires a Datadog API key.
 
 This module creates a Fargate applicaiton with a CI/CD user, load balancer, alerts, dashboards and logs.
 
+This module supports using SSM secrets
+
 ## Examples
 
 See `/examples/`
@@ -21,6 +23,8 @@ See `/examples/`
 | container_port | The port the container will listen on, used for load balancer health check Best practice is that this value is higher than 1024 so the container processes isn't running at root. | string | - | yes |
 string | `quay.io/turner/turner-defaultbackend:0.2.0` | no |
 | datadog_api_key_from | The SSM pointer to the datadog api key | string | - | no |
+| kms_key_aliases | The Key aliases the app is allowed to decrypt with | list(string) | "alias/aws/ssm" | no |
+| secrets | The secrets SSM ARNs | list(name,valueFrom) | - | no |
 | deregistration_delay | The amount time for Elastic Load Balancing to wait before changing the state of a deregistering target from draining to unused | string | `30` | no |
 | ecs_as_cpu_high_threshold_per | If the average CPU utilization over a minute rises to this threshold, the number of containers will be increased (but not above ecs_autoscale_max_instances). | string | `80` | no |
 | ecs_as_cpu_low_threshold_per | If the average CPU utilization over a minute drops to this threshold, the number of containers will be reduced (but not below ecs_autoscale_min_instances). | string | `20` | no |
