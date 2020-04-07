@@ -25,3 +25,7 @@ output "alb_security_group_id" {
 output "cicd_user_name" {
   value = "${aws_iam_user.cicd.name}"
 }
+
+output "ecs_app_role_id" {
+  value = "${aws_iam_role.app_role.id}"
+}
