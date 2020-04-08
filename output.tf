@@ -27,5 +27,5 @@ output "cicd_user_name" {
 }
 
 output "ecs_app_role_id" {
-  value = ${aws_iam_role.app_role.id}
+  value = aws_iam_role.app_role.id
 }
