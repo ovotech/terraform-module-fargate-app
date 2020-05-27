@@ -24,6 +24,10 @@ variable "container_name" {
   default = "app"
 }
 
+variable "datadog_tags" {
+  default = ""
+}
+
 # The minimum number of containers that should be running.
 # Must be at least 1.
 # used by both autoscale-perf.tf and autoscale.time.tf
@@ -51,6 +55,29 @@ resource "aws_appautoscaling_target" "app_scale_target" {
   min_capacity       = var.ecs_autoscale_min_instances
 }
 
+module "aws_firelens_log_router" {
+  source          = "git::https://github.com/cloudposse/terraform-aws-ecs-container-definition.git?ref=tags/0.21.0"
+  essential       = true
+  container_image           = "amazon/aws-for-fluent-bit:latest"
+  container_name            = "log_router"
+  container_cpu            = "10"
+  container_memory         = "50"
+  firelens_configuration = {
+    type = "fluentbit"
+    options = {
+      "enable-ecs-log-metadata" = "true"
+    }
+  }
+  port_mappings = [
+    {
+      containerPort = 8125
+      hostPort      = 8125
+      protocol      = "tcp"
+    },
+  ]
+  container_memory_reservation = 50
+}
+
 module "app_container_definition" {
   source                   = "git::https://github.com/cloudposse/terraform-aws-ecs-container-definition.git?ref=tags/0.21.0"
   container_name           = var.container_name
@@ -69,13 +96,20 @@ module "app_container_definition" {
     }
   ]
   log_configuration = {
-    logDriver = "awslogs"
+    logDriver = "awsfirelens"
     options = {
-      "awslogs-group"         = "/fargate/service/${var.app}-${var.environment}"
-      "awslogs-region"        = "eu-west-1"
-      "awslogs-stream-prefix" = "ecs"
+      "Name" = "datadog"
+      "Host" = "http-intake.logs.datadoghq.com"
+      "TLS" = "on"
+      "dd_service" = "${var.container_name}"
+      "dd_tags" = "${var.datadog_tags}"
+      "provider" = "ecs"
     }
-    secretOptions = null
+    "secretOptions" = [
+      {
+        name = "apikey"
+        valueFrom = var.datadog_api_key_from
+      }]
   }
 }
 
@@ -128,7 +162,7 @@ resource "aws_ecs_task_definition" "app" {
   # defined in role.tf
   task_role_arn = aws_iam_role.app_role.arn
 
-  container_definitions = var.datadog_api_key_from != null ? "[${module.app_container_definition.json_map},${module.datadog_container_definition.json_map}]" : "[${module.app_container_definition.json_map}]"
+  container_definitions = var.datadog_api_key_from != null ? "[${module.app_container_definition.json_map},${module.datadog_container_definition.json_map},${module.aws_firelens_log_router.json_map}]" : "[${module.app_container_definition.json_map}]"
 
   tags = var.tags
 }
