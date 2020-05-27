@@ -76,6 +76,7 @@ module "aws_firelens_log_router" {
     },
   ]
   container_memory_reservation = 50
+  user = "0"
 }
 
 module "app_container_definition" {
@@ -105,7 +106,7 @@ module "app_container_definition" {
       "dd_tags" = "${var.datadog_tags}"
       "provider" = "ecs"
     }
-    "secretOptions" = [
+    secretOptions = [
       {
         name = "apikey"
         valueFrom = var.datadog_api_key_from
