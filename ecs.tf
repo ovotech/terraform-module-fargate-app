@@ -42,6 +42,55 @@ variable "ecs_autoscale_max_instances" {
   default = "8"
 }
 
+variable "enable_datadog_log_forwarding" {
+  default = false
+}
+
+locals {
+  # default log config without datadog log forwarding
+  default_log_config = {
+    logDriver = "awslogs"
+    options = {
+      "awslogs-group"         = "/fargate/service/${var.app}-${var.environment}"
+      "awslogs-region"        = "eu-west-1"
+      "awslogs-stream-prefix" = "ecs"
+    }
+    secretOptions = null
+  }
+
+  # config for datadog log forwarding
+  datadog_logforwarding = {
+    logDriver = "awsfirelens"
+    options = {
+      "Name" = "datadog"
+      "Host" = "http-intake.logs.datadoghq.com"
+      "TLS" = "on"
+      "dd_service" = var.container_name
+      "dd_tags" = var.datadog_tags
+      "provider" = "ecs"
+    }
+    secretOptions = [
+      {
+        name = "apikey"
+        valueFrom = var.datadog_api_key_from
+      }]
+  }
+
+  # use datadog forwarding logging config if var.enable_datadog_log_forwarding is enabled, otherwise use the default cloudwatch awslogs
+  app_log_config = var.enable_datadog_log_forwarding ? local.datadog_logforwarding : local.default_log_config
+
+  # if datadog key is set then datadog agent with app container
+  # else just app container def
+  app_container = concat([module.app_container_definition.json_map], var.datadog_api_key_from != null ? [module.datadog_container_definition.json_map] : [] )
+
+  # if enable_datadog_log_forwarding && datadog_api_key_from is set then set up awsFireLens -> datadog log forwarding
+  # else empty config
+  firelens_dd_app_container = var.enable_datadog_log_forwarding == true && var.datadog_api_key_from != null ? [module.aws_firelens_log_router.json_map] : []
+
+  # merge and flatten decisions
+  container_defs = flatten(concat(local.app_container,  local.firelens_dd_app_container))
+}
+
 resource "aws_ecs_cluster" "app" {
   name = "${var.app}-${var.environment}"
   tags = var.tags
@@ -96,22 +145,7 @@ module "app_container_definition" {
       protocol      = "tcp"
     }
   ]
-  log_configuration = {
-    logDriver = "awsfirelens"
-    options = {
-      "Name" = "datadog"
-      "Host" = "http-intake.logs.datadoghq.com"
-      "TLS" = "on"
-      "dd_service" = "${var.container_name}"
-      "dd_tags" = "${var.datadog_tags}"
-      "provider" = "ecs"
-    }
-    secretOptions = [
-      {
-        name = "apikey"
-        valueFrom = var.datadog_api_key_from
-      }]
-  }
+  log_configuration = local.app_log_config
 }
 
 module "datadog_container_definition" {
@@ -163,7 +197,8 @@ resource "aws_ecs_task_definition" "app" {
   # defined in role.tf
   task_role_arn = aws_iam_role.app_role.arn
 
-  container_definitions = var.datadog_api_key_from != null ? "[${module.app_container_definition.json_map},${module.datadog_container_definition.json_map},${module.aws_firelens_log_router.json_map}]" : "[${module.app_container_definition.json_map}]"
+  # need to be a JSON string so merge defs and join to a JSON comma seperated array
+  container_definitions = "[${join(",", local.container_defs)}]"
 
   tags = var.tags
 }
