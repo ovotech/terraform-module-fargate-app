@@ -47,7 +47,7 @@ string | `quay.io/turner/turner-defaultbackend:0.2.0` | no |
 | tags | Tags for the infrastructure | map | - | yes |
 | vpc | The VPC to use for the Fargate cluster | string | - | yes |
 | vpc | The VPC to use for the Fargate cluster | string | - | yes |
-| enable_datadog_log_forwarding| Should enable data dog log forwarding. datadog_api_key_from must also be set for this to be enabled. | bool | false | no
+| enable_datadog_log_forwarding| Should enable data dog log forwarding. datadog_api_key_from must also be set for this to be enabled. You may need to modify task_memory, task_cpu, container_memory, container_cpu to account for this new container being added. | bool | false | no
 ## Outputs
 
 | Name | Description |
