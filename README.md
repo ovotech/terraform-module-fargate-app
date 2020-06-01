@@ -1,6 +1,6 @@
 Terraform module to provision a Fargate application.
 
-This module includes DataDog integration and requires a Datadog API key.
+This module includes DataDog integration and requires a Datadog API key. It also contains definition to allow datadog log forwarding if enabled.
 
 This module creates a Fargate applicaiton with a CI/CD user, load balancer, alerts, dashboards and logs.
 
@@ -46,7 +46,8 @@ string | `quay.io/turner/turner-defaultbackend:0.2.0` | no |
 | replicas | How many containers to run | string | `1` | no |
 | tags | Tags for the infrastructure | map | - | yes |
 | vpc | The VPC to use for the Fargate cluster | string | - | yes |
-
+| vpc | The VPC to use for the Fargate cluster | string | - | yes |
+| enable_datadog_log_forwarding| Should enable data dog log forwarding. datadog_api_key_from must also be set for this to be enabled. | bool | false | no
 ## Outputs
 
 | Name | Description |
