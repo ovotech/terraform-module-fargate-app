@@ -1,5 +1,5 @@
 # create ci/cd user with access keys (for build system)
-variable "ecr_repository_name" {}
+variable "ecr_repository_arn" {}
 
 resource "aws_iam_user" "cicd" {
   name = "srv_${var.app}_${var.environment}_cicd"
@@ -36,7 +36,7 @@ data "aws_iam_policy_document" "cicd_policy" {
     ]
 
     resources = [
-      data.aws_ecr_repository.ecr.arn,
+      var.ecr_repository_arn
     ]
   }
 
@@ -93,9 +93,5 @@ resource "aws_iam_group_policy" "cicd_group_policy" {
   name   = "${var.app}_${var.environment}_cicd"
   group   = aws_iam_group.cicd.name
   policy = data.aws_iam_policy_document.cicd_policy.json
-}
-
-data "aws_ecr_repository" "ecr" {
-  name = var.ecr_repository_name
 }
 
