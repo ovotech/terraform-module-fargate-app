@@ -65,7 +65,7 @@ locals {
       "Name" = "datadog"
       "Host" = "http-intake.logs.datadoghq.com"
       "TLS" = "on"
-      "dd_service" = var.container_name
+      "dd_service" = var.app
       "dd_tags" = var.datadog_tags
       "provider" = "ecs"
     }
