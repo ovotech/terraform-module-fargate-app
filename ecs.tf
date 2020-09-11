@@ -67,6 +67,7 @@ locals {
       "TLS" = "on"
       "dd_service" = var.app
       "dd_tags" = var.datadog_tags
+      "dd_source" = "fargate-app"
       "provider" = "ecs"
     }
     secretOptions = [
