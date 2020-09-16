@@ -62,7 +62,8 @@ locals {
       "Host" = "http-intake.logs.datadoghq.com"
       "TLS" = "on"
       "dd_service" = var.app
-      "dd_tags" = var.datadog_tags == {} ? var.tags : var.datadog_tags
+      "dd_tags" = var.datadog_tags == {} ? var.tags : var.datadog_tags 
+      "dd_source" = "fargate-app"
       "provider" = "ecs"
     }
     secretOptions = [
