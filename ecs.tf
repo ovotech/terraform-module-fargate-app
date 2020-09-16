@@ -66,7 +66,7 @@ locals {
       "Host" = "http-intake.logs.datadoghq.com"
       "TLS" = "on"
       "dd_service" = var.app
-      "dd_tags" = var.datadog_tags
+      "dd_tags" = var.datadog_tags == {} ? var.tags : var.datadog_tags
       "provider" = "ecs"
     }
     secretOptions = [
@@ -164,6 +164,10 @@ module "datadog_container_definition" {
     {
       name  = "DD_APM_ENABLED",
       value = true
+    },
+    {
+      name  = "DD_TAGS"
+      value = var.datadog_tags == {} ? var.tags : var.datadog_tags
     }
   ]
   secrets = [

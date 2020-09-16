@@ -10,7 +10,22 @@ variable "region" {
 
 # Tags for the infrastructure
 variable "tags" {
+  default = {}
   type = map(string)
+  validation {
+    condition = (lookup(var.tags,"team", "null") != "null" )
+    error_message = "Key 'team' and value is required."
+  }
+}
+
+# Tags for datadog agent 
+variable "tags_datadog" {
+  default = {}
+  type = map(string)
+  validation {
+    condition = (lookup(var.tags_datadog,"team", "null") != "null" )
+    error_message = "Key 'team' and value is required for datadog tags."
+  }
 }
 
 # The application's name
