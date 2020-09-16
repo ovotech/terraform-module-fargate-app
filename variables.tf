@@ -19,7 +19,7 @@ variable "tags" {
 }
 
 # Tags for datadog agent 
-variable "tags_datadog" {
+variable "datadog_tags" {
   default = {}
   type = map(string)
   validation {
