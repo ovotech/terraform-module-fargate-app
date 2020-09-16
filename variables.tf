@@ -13,6 +13,11 @@ variable "tags" {
   type = map(string)
 }
 
+# Tags for datadog agent
+variable "datadog_tags" {
+  type = string
+}
+
 # The application's name
 variable "app" {
 }

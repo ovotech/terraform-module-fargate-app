@@ -24,10 +24,6 @@ variable "container_name" {
   default = "app"
 }
 
-variable "datadog_tags" {
-  default = ""
-}
-
 # The minimum number of containers that should be running.
 # Must be at least 1.
 # used by both autoscale-perf.tf and autoscale.time.tf
@@ -165,6 +161,10 @@ module "datadog_container_definition" {
     {
       name  = "DD_APM_ENABLED",
       value = true
+    },
+    {
+      name  = "DD_TAGS"
+      value = var.datadog_tags
     }
   ]
   secrets = [
