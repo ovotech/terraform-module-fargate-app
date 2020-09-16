@@ -45,9 +45,12 @@ string | `quay.io/turner/turner-defaultbackend:0.2.0` | no |
 | region | The AWS region to use for the dev environment's infrastructure Currently, Fargate is only available in `us-east-1`. | string | `us-east-1` | no |
 | replicas | How many containers to run | string | `1` | no |
 | tags | Tags for the infrastructure | map | - | yes |
-| datadog_tags | Tags for datadog agent container | map(string) | var.tags | no |
+| datadog_tags | Tags for datadog agent container <sup>1</sup> Please add `team:team-name` to datadog dags | string | - | no<sup>1</sup> |
 | vpc | The VPC to use for the Fargate cluster | string | - | yes |
 | enable_datadog_log_forwarding| Should enable data dog log forwarding. datadog_api_key_from must also be set for this to be enabled. You may need to modify task_memory, task_cpu, container_memory, container_cpu to account for this new container being added. | bool | false | no
+
+
+
 ## Outputs
 
 | Name | Description |

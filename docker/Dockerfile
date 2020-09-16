@@ -1,4 +1,4 @@
-FROM hashicorp/terraform:0.13.0
+FROM hashicorp/terraform:0.12.3
 
 RUN apk add --no-cache python3 zip && \
     if [ ! -e /usr/bin/python ]; then ln -sf python3 /usr/bin/python ; fi && \
