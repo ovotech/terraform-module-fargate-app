@@ -164,7 +164,7 @@ module "datadog_container_definition" {
     },
     {
       name  = "DD_TAGS"
-      value = var.datadog_tags
+      value = replace(var.datadog_tags,","," ")
     }
   ]
   secrets = [
