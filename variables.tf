@@ -76,6 +76,11 @@ variable "ecs_task_subnets" {
 variable "lb_subnets" {
 }
 
+# Whether to drop requests with invalid header fields to block desync attacks
+variable "lb_drop_invalid_header_fields" {
+  default = false
+}
+
 # Ingress IP ranges that are allowed on the load balancer
 variable "lb_ingress_cidr_blocks" {
   default = ["0.0.0.0/0"]
