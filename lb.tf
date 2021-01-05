@@ -39,10 +39,11 @@ resource "aws_alb" "main" {
   name = "${var.app}-${var.environment}"
 
   # launch lbs in the public subnet
-  subnets         = split(",", var.lb_subnets)
-  security_groups = [aws_security_group.nsg_lb.id]
-  internal        = var.lb_internal
-  tags            = var.tags
+  subnets                    = split(",", var.lb_subnets)
+  security_groups            = [aws_security_group.nsg_lb.id]
+  internal                   = var.lb_internal
+  tags                       = var.tags
+  drop_invalid_header_fields = var.lb_drop_invalid_header_fields
 
   # enable access logs in order to get support from aws
   access_logs {
