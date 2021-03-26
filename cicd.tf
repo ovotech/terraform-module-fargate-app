@@ -1,6 +1,10 @@
 # create ci/cd user with access keys (for build system)
 variable "ecr_repository_arn" {}
 
+variable "additional_user_groups" {
+  default = []
+}
+
 resource "aws_iam_user" "cicd" {
   name = "srv_${var.app}_${var.environment}_cicd"
 }
@@ -9,14 +13,10 @@ resource "aws_iam_group" "cicd" {
   name = "srv_${var.app}_${var.environment}_cicd"
 }
 
-resource "aws_iam_group_membership" "cicd" {
-  name = "srv_${var.app}_${var.environment}_cicd_group_membership"
+resource "aws_iam_user_group_membership" "cicd" {
+  user = aws_iam_user.cicd.name
 
-  users = [
-    aws_iam_user.cicd.name
-  ]
-
-  group = aws_iam_group.cicd.name
+  groups = concat([aws_iam_group.cicd.name], var.additional_user_groups)
 }
 
 # grant required permissions to deploy
