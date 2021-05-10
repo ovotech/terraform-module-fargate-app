@@ -42,6 +42,7 @@ string | `quay.io/turner/turner-defaultbackend:0.2.0` | no |
 | lb_subnets | The subnets, minimum of 2, that are a part of the VPC(s), that the LB is deployed into (often public) | string | - | yes |
 | lb_ingress_cidr_blocks | Ingress IP ranges that are allowed on the load balancer | string list | `["0.0.0.0/0"]` | no |
 | lb_drop_invalid_header_fields | Indicates whether invalid header fields are dropped in application load balancers. | boolean | false | no |
+| lb_logs_bucket_policy_override | A policy document to add to the load balancer logs bucket policy | string | `""` | no |
 | ecs_task_subnets | The subnets, minimum of 2, that are a part of the VPC(s), that the task is deployed into (should be private) | string | - | yes |
 | region | The AWS region to use for the dev environment's infrastructure Currently, Fargate is only available in `us-east-1`. | string | `us-east-1` | no |
 | replicas | How many containers to run | string | `1` | no |
