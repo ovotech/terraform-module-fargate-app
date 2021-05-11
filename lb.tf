@@ -35,6 +35,10 @@ variable "lb_internal" {
   default = false
 }
 
+variable "lb_logs_bucket_policy_override" {
+  default = ""
+}
+
 resource "aws_alb" "main" {
   name = "${var.app}-${var.environment}"
 
@@ -106,28 +110,26 @@ resource "aws_s3_bucket" "lb_access_logs" {
 resource "aws_s3_bucket_policy" "lb_access_logs" {
   bucket = aws_s3_bucket.lb_access_logs.id
 
-  policy = <<POLICY
-{
-  "Id": "Policy",
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": [
-        "s3:PutObject"
-      ],
-      "Effect": "Allow",
-      "Resource": [
-        "${aws_s3_bucket.lb_access_logs.arn}",
-        "${aws_s3_bucket.lb_access_logs.arn}/*"
-      ],
-      "Principal": {
-        "AWS": [ "${data.aws_elb_service_account.main.arn}" ]
-      }
-    }
-  ]
+  policy = data.aws_iam_policy_document.lb_access_logs.json
 }
-POLICY
 
+data "aws_iam_policy_document" "lb_access_logs" {
+  policy_id = "Policy"
+
+  override_json = var.lb_logs_bucket_policy_override
+
+  statement {
+    actions = ["s3:PutObject"]
+    effect = "Allow"
+    resources = [
+      aws_s3_bucket.lb_access_logs.arn,
+      "${aws_s3_bucket.lb_access_logs.arn}/*"
+    ]
+    principals {
+      identifiers = [data.aws_elb_service_account.main.arn]
+      type = "AWS"
+    }
+  }
 }
 
 # The load balancer DNS name
