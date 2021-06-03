@@ -86,6 +86,11 @@ variable "lb_ingress_cidr_blocks" {
   default = ["0.0.0.0/0"]
 }
 
+# Whether to allow egress traffic from the task or not
+variable "task_all_egress_allowed" {
+  default = true
+}
+
 # The docker image that will be deployed to ECS
 variable "docker_image" {
   default = "nginx"
