@@ -40,6 +40,8 @@ resource "aws_security_group_rule" "nsg_task_ingress_rule" {
 }
 
 resource "aws_security_group_rule" "nsg_task_egress_rule" {
+  count = var.task_all_egress_allowed ? 1 : 0
+
   description = "Allows task to establish connections to all resources"
   type        = "egress"
   from_port   = "0"
