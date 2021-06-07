@@ -53,6 +53,6 @@ resource "aws_cloudwatch_metric_alarm" "HTTPCode_ELB_5XX_Count_alarm" {
   insufficient_data_actions = []
   treat_missing_data        = "notBreaching"
   dimensions = {
-    LoadBalancer = "${aws_alb.main.arn_suffix}"
+    LoadBalancer = "${aws_alb.main[0].arn_suffix}"
   }
 }

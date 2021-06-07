@@ -40,6 +40,7 @@ variable "lb_logs_bucket_policy_override" {
 }
 
 resource "aws_alb" "main" {
+  count = 1
   name = "${var.app}-${var.environment}"
 
   # launch lbs in the public subnet
@@ -52,7 +53,7 @@ resource "aws_alb" "main" {
   # enable access logs in order to get support from aws
   access_logs {
     enabled = true
-    bucket  = aws_s3_bucket.lb_access_logs.bucket
+    bucket  = var.alb_access_log_bucket == null ? element(aws_s3_bucket.lb_access_logs, 0).bucket : var.alb_access_log_bucket
   }
 }
 
@@ -81,6 +82,7 @@ data "aws_elb_service_account" "main" {
 
 # bucket for storing ALB access logs
 resource "aws_s3_bucket" "lb_access_logs" {
+  count = var.alb_access_log_bucket == null ? 1 : 0
   bucket        = "${var.app}-${var.environment}-lb-access-logs"
   acl           = "private"
   tags          = var.tags
@@ -108,12 +110,14 @@ resource "aws_s3_bucket" "lb_access_logs" {
 
 # give load balancing service access to the bucket
 resource "aws_s3_bucket_policy" "lb_access_logs" {
-  bucket = aws_s3_bucket.lb_access_logs.id
+  count = var.alb_access_log_bucket == null ? 1 : 0
+  bucket = aws_s3_bucket.lb_access_logs[0].id
 
-  policy = data.aws_iam_policy_document.lb_access_logs.json
+  policy = data.aws_iam_policy_document.lb_access_logs[0].json
 }
 
 data "aws_iam_policy_document" "lb_access_logs" {
+  count = var.alb_access_log_bucket == null ? 1 : 0
   policy_id = "Policy"
 
   override_json = var.lb_logs_bucket_policy_override
@@ -122,8 +126,8 @@ data "aws_iam_policy_document" "lb_access_logs" {
     actions = ["s3:PutObject"]
     effect = "Allow"
     resources = [
-      aws_s3_bucket.lb_access_logs.arn,
-      "${aws_s3_bucket.lb_access_logs.arn}/*"
+      aws_s3_bucket.lb_access_logs[0].arn,
+      "${aws_s3_bucket.lb_access_logs[0].arn}/*"
     ]
     principals {
       identifiers = [data.aws_elb_service_account.main.arn]
@@ -134,6 +138,6 @@ data "aws_iam_policy_document" "lb_access_logs" {
 
 # The load balancer DNS name
 output "lb_dns" {
-  value = aws_alb.main.dns_name
+  value = aws_alb.main[0].dns_name
 }
 

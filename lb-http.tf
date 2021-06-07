@@ -4,7 +4,7 @@ variable "http_port" {
 }
 
 resource "aws_alb_listener" "redirect_http_to_https" {
-  load_balancer_arn = aws_alb.main.id
+  load_balancer_arn = aws_alb.main[0].id
   port              = var.http_port
   protocol          = "HTTP"
 
