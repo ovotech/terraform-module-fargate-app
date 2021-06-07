@@ -9,7 +9,7 @@ variable "https_port" {
 variable "certificate_arn" {}
 
 resource "aws_alb_listener" "https" {
-  load_balancer_arn = aws_alb.main.id
+  load_balancer_arn = aws_alb.main[0].id
   port              = var.https_port
   protocol          = "HTTPS"
   certificate_arn   = var.certificate_arn

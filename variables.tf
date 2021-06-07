@@ -145,6 +145,12 @@ variable "container_cpu" {
 
 variable "datadog_api_key_from" {
   type        = string
-  description = "The SSM parameter for the DataDog API key for this applicaiton"
+  description = "The SSM parameter for the DataDog API key for this application"
+  default     = null
+}
+
+variable "alb_access_log_bucket" {
+  type        = string
+  description = "Custom S3 bucket where the load balancer access logs should go to. If not specified, a bucket will be created for access log."
   default     = null
 }
