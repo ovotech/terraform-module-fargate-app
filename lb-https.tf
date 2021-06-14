@@ -8,11 +8,16 @@ variable "https_port" {
 
 variable "certificate_arn" {}
 
+variable "lb_tls_policy" {
+  default = "ELBSecurityPolicy-2016-08"
+}
+
 resource "aws_alb_listener" "https" {
   load_balancer_arn = aws_alb.main[0].id
   port              = var.https_port
   protocol          = "HTTPS"
   certificate_arn   = var.certificate_arn
+  ssl_policy        = var.lb_tls_policy
 
   default_action {
     target_group_arn = aws_alb_target_group.main.id
