@@ -3,7 +3,13 @@ variable "http_port" {
   default = "80"
 }
 
+variable "lb_http_redirect" {
+  default = true
+}
+
 resource "aws_alb_listener" "redirect_http_to_https" {
+  count = var.lb_http_redirect ? 1 : 0
+
   load_balancer_arn = aws_alb.main[0].id
   port              = var.http_port
   protocol          = "HTTP"
@@ -20,6 +26,8 @@ resource "aws_alb_listener" "redirect_http_to_https" {
 }
 
 resource "aws_security_group_rule" "ingress_lb_http" {
+  count = var.lb_http_redirect ? 1 : 0
+
   type              = "ingress"
   description       = "HTTP"
   from_port         = var.http_port

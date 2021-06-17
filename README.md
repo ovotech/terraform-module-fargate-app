@@ -44,6 +44,7 @@ string | `quay.io/turner/turner-defaultbackend:0.2.0` | no |
 | lb_drop_invalid_header_fields | Indicates whether invalid header fields are dropped in application load balancers. | boolean | false | no |
 | lb_logs_bucket_policy_override | A policy document to add to the load balancer logs bucket policy | string | `""` | no |
 | lb_tls_policy | The [security policy](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies) to use for the HTTPS load balancer's SSL configuration | string | `"ELBSecurityPolicy-2016-08"` | no |
+| lb_http_redirect | Whether to redirect from HTTP to HTTPS or not. | boolean | `true` | no |
 | task_all_egress_allowed | Whether the task's security group allows all egress traffic or not | bool | true | no | 
 | ecs_task_subnets | The subnets, minimum of 2, that are a part of the VPC(s), that the task is deployed into (should be private) | string | - | yes |
 | region | The AWS region to use for the dev environment's infrastructure Currently, Fargate is only available in `us-east-1`. | string | `us-east-1` | no |
