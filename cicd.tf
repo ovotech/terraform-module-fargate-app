@@ -88,6 +88,19 @@ data "aws_iam_policy_document" "cicd_policy" {
       aws_iam_user.cicd.arn,
     ]
   }
+
+  # allow user to get data from s3 buckets
+  statement {
+    sid = "s3access"
+
+    actions =[
+      "s3:GetObject"
+    ]
+
+    resources = [
+      "arn:aws:s3:::*",
+    ]
+  }
 }
 
 resource "aws_iam_group_policy" "cicd_group_policy" {
