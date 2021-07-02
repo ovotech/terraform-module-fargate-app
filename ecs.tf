@@ -78,11 +78,11 @@ locals {
 
   # if datadog key is set then datadog agent with app container
   # else just app container def
-  app_container = concat([module.app_container_definition.json_map], var.datadog_api_key_from != null ? [module.datadog_container_definition.json_map] : [] )
+  app_container = concat([module.app_container_definition.json_map_encoded], var.datadog_api_key_from != null ? [module.datadog_container_definition.json_map_encoded] : [] )
 
   # if enable_datadog_log_forwarding && datadog_api_key_from is set then set up awsFireLens -> datadog log forwarding
   # else empty config
-  firelens_dd_app_container = var.enable_datadog_log_forwarding == true && var.datadog_api_key_from != null ? [module.aws_firelens_log_router.json_map] : []
+  firelens_dd_app_container = var.enable_datadog_log_forwarding == true && var.datadog_api_key_from != null ? [module.aws_firelens_log_router.json_map_encoded] : []
 
   # merge and flatten decisions
   container_defs = flatten(concat(local.app_container,  local.firelens_dd_app_container))
@@ -102,12 +102,14 @@ resource "aws_appautoscaling_target" "app_scale_target" {
 }
 
 module "aws_firelens_log_router" {
-  source          = "git::https://github.com/cloudposse/terraform-aws-ecs-container-definition.git?ref=tags/0.21.0"
+  source          = "git::https://github.com/cloudposse/terraform-aws-ecs-container-definition.git?ref=tags/0.40.0"
   essential       = true
   container_image           = "amazon/aws-for-fluent-bit:latest"
   container_name            = "log_router"
   container_cpu            = "10"
   container_memory         = "50"
+  start_timeout            = "30"
+  stop_timeout             = "30"
   firelens_configuration = {
     type = "fluentbit"
     options = {
@@ -126,7 +128,7 @@ module "aws_firelens_log_router" {
 }
 
 module "app_container_definition" {
-  source                   = "git::https://github.com/cloudposse/terraform-aws-ecs-container-definition.git?ref=tags/0.21.0"
+  source                   = "git::https://github.com/cloudposse/terraform-aws-ecs-container-definition.git?ref=tags/0.40.0"
   container_name           = var.container_name
   container_image          = var.docker_image
   container_cpu            = var.container_cpu
@@ -134,6 +136,7 @@ module "app_container_definition" {
   essential                = true
   readonly_root_filesystem = false
   environment              = var.environment_vars
+  container_memory_reservation = var.container_memory_reservation
   secrets                  = var.secrets
   port_mappings = [
     {
@@ -143,14 +146,19 @@ module "app_container_definition" {
     }
   ]
   log_configuration = local.app_log_config
+  start_timeout            = "30"
+  stop_timeout             = "30"
 }
 
 module "datadog_container_definition" {
-  source                   = "git::https://github.com/cloudposse/terraform-aws-ecs-container-definition.git?ref=tags/0.21.0"
+  source                   = "git::https://github.com/cloudposse/terraform-aws-ecs-container-definition.git?ref=tags/0.40.0"
   container_name           = "datadog-agent"
   container_image          = "datadog/agent:7.16.1"
   container_cpu            = "10"
   container_memory         = "128"
+  container_memory_reservation = "128"
+  start_timeout            = "30"
+  stop_timeout             = "30"
   essential                = false
   readonly_root_filesystem = false
   environment = [
