@@ -102,7 +102,7 @@ resource "aws_appautoscaling_target" "app_scale_target" {
 }
 
 module "aws_firelens_log_router" {
-  source          = "git::https://github.com/cloudposse/terraform-aws-ecs-container-definition.git?ref=tags/0.40.0"
+  source          = "git::https://github.com/cloudposse/terraform-aws-ecs-container-definition.git?ref=tags/0.57.0"
   essential       = true
   container_image           = "amazon/aws-for-fluent-bit:latest"
   container_name            = "log_router"
@@ -128,7 +128,7 @@ module "aws_firelens_log_router" {
 }
 
 module "app_container_definition" {
-  source                   = "git::https://github.com/cloudposse/terraform-aws-ecs-container-definition.git?ref=tags/0.40.0"
+  source                   = "git::https://github.com/cloudposse/terraform-aws-ecs-container-definition.git?ref=tags/0.57.0"
   container_name           = var.container_name
   container_image          = var.docker_image
   container_cpu            = var.container_cpu
@@ -151,7 +151,7 @@ module "app_container_definition" {
 }
 
 module "datadog_container_definition" {
-  source                   = "git::https://github.com/cloudposse/terraform-aws-ecs-container-definition.git?ref=tags/0.40.0"
+  source                   = "git::https://github.com/cloudposse/terraform-aws-ecs-container-definition.git?ref=tags/0.57.0"
   container_name           = "datadog-agent"
   container_image          = "datadog/agent:7.16.1"
   container_cpu            = "10"
