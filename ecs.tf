@@ -104,7 +104,7 @@ resource "aws_appautoscaling_target" "app_scale_target" {
 module "aws_firelens_log_router" {
   source          = "git::https://github.com/cloudposse/terraform-aws-ecs-container-definition.git?ref=tags/0.57.0"
   essential       = true
-  container_image           = "amazon/aws-for-fluent-bit:latest"
+  container_image           = "amazon/aws-for-fluent-bit:${var.fluent_bit_version}"
   container_name            = "log_router"
   container_cpu            = "10"
   container_memory         = "50"

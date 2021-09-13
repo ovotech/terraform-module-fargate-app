@@ -96,6 +96,10 @@ variable "docker_image" {
   default = "nginx"
 }
 
+variable "fluent_bit_version" {
+  default = "latest"
+}
+
 # List of actions to trigger when alerts are sent
 variable "alert_actions" {
   description = "List of ARN of action to take on alarms, e.g. SNS topics"
