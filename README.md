@@ -52,6 +52,7 @@ string | `quay.io/turner/turner-defaultbackend:0.2.0` | no |
 | tags | Tags for the infrastructure | map | - | yes |
 | datadog_tags | Tags for datadog agent container. <sup>(1)</sup> Please add `team:team-name` to datadog tags | string | - | yes<sup>(1)</sup> |
 | vpc | The VPC to use for the Fargate cluster | string | - | yes |
+| fluent_bit_version | Fluent bit version to use | string | - | no |
 | alb_access_log_bucket | The bucket to use for sending alb access logs to. | string | - | no |
 | additional_user_groups | Any additional groups the user should belong to that's used for deploying your fargate app. | list(string) | [] | no |
 | enable_datadog_log_forwarding| Should enable data dog log forwarding. datadog_api_key_from must also be set for this to be enabled. You may need to modify task_memory, task_cpu, container_memory, container_cpu to account for this new container being added. | bool | false | no
