@@ -56,6 +56,7 @@ string | `quay.io/turner/turner-defaultbackend:0.2.0` | no |
 | alb_access_log_bucket | The bucket to use for sending alb access logs to. | string | - | no |
 | additional_user_groups | Any additional groups the user should belong to that's used for deploying your fargate app. | list(string) | [] | no |
 | enable_datadog_log_forwarding| Should enable data dog log forwarding. datadog_api_key_from must also be set for this to be enabled. You may need to modify task_memory, task_cpu, container_memory, container_cpu to account for this new container being added. | bool | false | no
+| HTTPCode_ELB_5XX_threshold | Threshold for ELB 5XX alert | string | 25 | no
 ## Outputs
 
 | Name | Description |

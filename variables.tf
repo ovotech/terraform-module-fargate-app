@@ -158,3 +158,9 @@ variable "alb_access_log_bucket" {
   description = "Custom S3 bucket where the load balancer access logs should go to. If not specified, a bucket will be created for access log."
   default     = null
 }
+
+variable "HTTPCode_ELB_5XX_threshold" {
+  type        = string
+  description = "Threshold for ELB 5XX alert"
+  default     = "25"
+}
