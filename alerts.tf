@@ -46,7 +46,7 @@ resource "aws_cloudwatch_metric_alarm" "HTTPCode_ELB_5XX_Count_alarm" {
   namespace                 = "AWS/ApplicationELB"
   period                    = "300"
   statistic                 = "Sum"
-  threshold                 = "25"
+  threshold                 = var.HTTPCode_ELB_5XX_threshold
   alarm_description         = "HTTP 5XX alarm for over 25 counts within 5 minutes for ${var.app}"
   alarm_actions             = var.alert_actions
   ok_actions                = var.alert_actions
