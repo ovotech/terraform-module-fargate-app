@@ -164,3 +164,8 @@ variable "HTTPCode_ELB_5XX_threshold" {
   description = "Threshold for ELB 5XX alert"
   default     = "25"
 }
+
+variable "ecs_container_insights" {
+  description = "Set to enable CloudWatch Container Insights for a Fargate cluster."
+  default     = false
+}
