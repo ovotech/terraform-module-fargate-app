@@ -86,11 +86,19 @@ locals {
 
   # merge and flatten decisions
   container_defs = flatten(concat(local.app_container,  local.firelens_dd_app_container))
+
+  # use cloudwatch container insights if containerInsights is enabled
+  container_insights_setting = {
+    name  = "containerInsights"
+    value = var.containerInsights
+  }
+
 }
 
 resource "aws_ecs_cluster" "app" {
   name = "${var.app}-${var.environment}"
   tags = var.tags
+  setting = local.container_insights_setting
 }
 
 resource "aws_appautoscaling_target" "app_scale_target" {
