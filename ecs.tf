@@ -90,7 +90,7 @@ locals {
   # use cloudwatch container insights if containerInsights is enabled
   container_insights_setting = {
     name  = "containerInsights"
-    value = var.containerInsights
+    value = var.containerInsights ? "enabled" : "disabled"
   }
 
 }
